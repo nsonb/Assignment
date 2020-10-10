@@ -5,6 +5,7 @@ const  express    = require('express'),
 
 var todoRouter = require('./modules/todos')
 var filterRouter = require('./modules/filter');
+var searchRouter = require('./modules/search');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -13,8 +14,11 @@ app.get('/', (req, res) => res.send('Welcome to todo app'));
 // router for exercise 1; todos get, add, remove and update
 app.use('/todos', todoRouter);
 
-// router for exercise 2
+// router for exercise 2; filtering for complete todos, alphabetically sorted todos and reverse sorted todos
 app.use('/filter', filterRouter);
+
+// router for search Router
+app.use('/search', searchRouter);
 
 
 app.listen(port, () => console.log(`Server is running on ${port}`));
