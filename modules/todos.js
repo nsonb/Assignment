@@ -1,6 +1,5 @@
 var express = require('express');
 var todoRouter = express.Router();
-var todo = require('../models/todo') ;
 var FileHandler = require('./fileHandler');
 var filterRouter = require('./filter') ;
 
@@ -19,54 +18,89 @@ todoRouter.get('/', (req, res) => {
 
 // api path to add more todo
 todoRouter.post('/', (req, res) => {
-    console.log(req.body);
+    let filehandler = new FileHandler();
+    // a block to check if enough data is supplied
+    if(req.body == null || req.body.name == null || req.body.completed == null || req.body.description == null) {
+        res.send('Not enough data point in todo');
+        return;
+    }
+    filehandler.readFile().then(todo => {
+        console.log(todo); 
+        todo.push({
+            id: todo.length+1,
+            name: req.body.name,
+            description: req.body.description,
+            completed: req.body.completed
+        })
+        filehandler.writeFile(todo).then((result) => {
+            if(result === 'error') {
+                res.send('error writing file')
+            } else {
+                res.send(todo);
+            }
+        })
+        
+    });
+    
+})
+
+// api path to remove a todo
+todoRouter.delete('/:id', (req, res) => {
+    // check if item exists before delete
+    let filehandler = new FileHandler();
+
+    filehandler.readFile().then(todo => {
+        let index = todo.findIndex((item) => {
+            return item.id === Number(req.params.id);
+        });
+
+        if(index < 0) {
+            res.send('This todo does not exist');
+            return;
+        }
+        todo = todo.filter(todoNote => todoNote.id !== Number(req.params.id));
+        filehandler.writeFile(todo).then((result) => {
+            if(result === 'error') {
+                res.send('error writing file')
+            } else {
+                res.json(todo);
+            }
+        })
+    });
+    
+})
+
+// api to update a todo
+todoRouter.put('/', (req, res) => {
+    let filehandler = new FileHandler();
     // a block to check if enough data is supplied
     if(req.body == null || req.body.name == null || req.body.completed == null || req.body.description == null) {
         res.send('Not enough data point in todo');
         return;
     }
 
-    push({
-        id: length+1,
-        name: req.body.name,
-        description: req.body.description,
-        completed: req.body.completed
-    })
-    res.json(todo);
-})
+    filehandler.readFile().then(todo => {
+        console.log(todo); 
+        // find the id of the todo that needs to be replaced
+        let index = todo.findIndex((item) => {return item.id === req.body.id});
 
-// api path to remove a todo
-todoRouter.delete('/:id', (req, res) => {
-    // check if item exists before delete
-    if(findIndex((item) => {item.id === req.params.id}) < 0) {
-        res.send('This todo does not exist');
-        return;
-    }
-    todo = filter(todoNote => todoNote.id !== Number(req.params.id));
-    res.json(todo);
-})
-
-// api to update a todo
-todoRouter.put('/', (req, res) => {
-    // a block to check if enough data is supplied
-    if(req.body == null || req.body.name == null || req.body.complete == null || req.body.description == null) {
-        res.send('Not enough data point in todo');
-        return;
-    }
-    // find the id of the todo that needs to be replaced
-    let index = findIndex((item) => {return item.id === req.body.id});
-    console.log(index);
-
-    // check if item exists before replacement
-    if(index < 0) {
-        res.send('This todo does not exist');
-        return;
-    } else {
-        let replacement = req.body;
-        splice(index, 1, replacement);
-        console.log(todo);
-        res.json(todo);
-    }
-    
+        // check if item exists before replacement
+        if(index < 0) {
+            res.send('This todo does not exist');
+            return;
+        } else {
+            let replacement = req.body;
+            todo.splice(index, 1, replacement);
+            console.log(todo);
+            res.json(todo);
+            filehandler.writeFile(todo).then((result) => {
+                if(result === 'error') {
+                    res.send('error writing file')
+                } else {
+                    res.send(todo);
+                }
+            })
+        }
+    });  
 })
 module.exports = todoRouter;

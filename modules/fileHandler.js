@@ -2,8 +2,13 @@ var fs = require('fs');
 var todo = require('../models/todo') ;
 
 class FileHandler  {
-    writeFile() {
-
+    writeFile(todo) {
+        return new Promise((resolve) => {
+            fs.writeFile('./models/todo.json', JSON.stringify(todo), (err) => {
+                if (err) resolve('error') ;
+                resolve('file written done');
+            })
+        })
     }
 
     readFile = () => {
