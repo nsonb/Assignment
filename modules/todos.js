@@ -1,7 +1,7 @@
 var express = require('express');
 var todoRouter = express.Router();
 var FileHandler = require('./fileHandler');
-var filterRouter = require('./filter') ;
+
 
 // api paths to get all of the todos
 todoRouter.get('/', (req, res) => {
