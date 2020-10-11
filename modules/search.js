@@ -3,7 +3,6 @@ var searchRouter = express.Router();
 var FileHandler = require('./fileHandler');
 
 searchRouter.get('/:search', (req, res) => {
-    console.log(req.params.search);
     let filehandler = new FileHandler();
 
     filehandler.readFile().then(todos => {
