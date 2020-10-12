@@ -1,6 +1,6 @@
 var fs = require('fs');
-var todo = require('../models/todo') ;
 
+// write to todo.json in models. The todo.js is not used, all the data in todo.js is copied over to todo.json
 class FileHandler  {
     writeFile(todo) {
         return new Promise((resolve) => {

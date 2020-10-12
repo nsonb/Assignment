@@ -82,7 +82,7 @@ todoRouter.put('/', (req, res) => {
     filehandler.readFile().then(todo => {
         console.log(todo); 
         // find the id of the todo that needs to be replaced
-        let index = todo.findIndex((item) => {return item.id === req.body.id});
+        let index = todo.findIndex((item) => item.id === req.body.id);
 
         // check if item exists before replacement
         if(index < 0) {

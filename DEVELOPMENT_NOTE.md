@@ -30,7 +30,7 @@ sent back to the client.
 ```
 
 Here a new problem arises when using Postman to test out the api: if one of the element in the body is missing,
-the app can break in the future since missing elements. So a small check is added to the api call:
+the app can break in the future since missing elements. So a small check is added to the api call, and if the request from the client is faulty, a message is sent instead, warning of missing elements:
 
 ```javascript
         app.post('/todos', (req, res) => {
@@ -116,7 +116,7 @@ Thus this is the end of the todos task of the assignment
 ----------------------------------------------------------------------------------------------------------------------------
 
 # filter assignment
-At this point of development, if a new filter route is added into the app.js, the application will look more complicated than it needs to be, so it is a good idea to use module routing so it is easier to debug the application in the future. So at this point all the todos functions are moved to /modules/todos.js then app.js will import todos.js and reroute the request there:
+At this point of development, if a new filter route is added into the app.js, the application will look more complicated than it needs to be, so a better idea is to use module routing to simplify the debugging process in the future. So at this point all the todos functions are moved to /modules/todos.js then app.js will import todos.js and reroute the request there:
 ```javascript
         // in app.js
         var todoRouter = require('./modules/todos');
@@ -213,4 +213,4 @@ The search assignment is solved with the use of search function in array:
 # CONCLUSION
 The server was hand tested using Postman making request to the server. There are other scalable solutions for testing the server such as set up unit testing with nodejs but I admit I am not very familiar with unit testing or the process of test-driven application development.
 
-Another point is the data storage. Optimally for a larger server handling more requests, it is better to use a dedicated database manager but for this small assignment, I decided to use a json file to store the data instead, which is faster to implement. 
+Another point is the data storage. Optimally for a larger server handling more requests, it is better to use a dedicated database manager but for this small assignment, I decided to use a json file to store the data instead, which succeeds in completing the current task.
