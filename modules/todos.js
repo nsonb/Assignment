@@ -92,13 +92,14 @@ todoRouter.put('/', (req, res) => {
             let replacement = req.body;
             todo.splice(index, 1, replacement);
             console.log(todo);
-            res.json(todo);
             filehandler.writeFile(todo).then((result) => {
                 if(result === 'error') {
                     res.send('error writing file')
                 } else {
-                    res.send(todo);
+                    res.json(todo);
                 }
+            }).catch((e) => {
+                console.log(e);
             })
         }
     });  
