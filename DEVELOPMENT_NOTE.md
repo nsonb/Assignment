@@ -208,6 +208,28 @@ The search assignment is solved with the use of search function in array:
             
         })
 ```
+# further testing
+After some testing, there are some problems with the current id generation system, which can leads to duplicate id - which should not happen since the system relies on unique id to function. Therefore, a unique id generation function is used to generate unique id, which also checks for duplicate:
+
+```javascript
+const generateRandomID = (idList) => {
+    while(true) {
+        var newId = getRandomIntInclusive(0, 1000)
+        console.log(newId);
+        if(idList.includes(newId)=== false) {
+            return newId;       
+        }
+    }
+}
+
+// the getRandomIntInclusive is borrowed from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+}
+
+```
 
 ----------------------------------------------------------------------------------------------------------------------------
 # CONCLUSION

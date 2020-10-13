@@ -25,9 +25,8 @@ todoRouter.post('/', (req, res) => {
         return;
     }
     filehandler.readFile().then(todo => {
-        console.log(todo); 
         todo.push({
-            id: todo.length+1,
+            id: generateRandomID(todo.map((item) => item.id)),
             name: req.body.name,
             description: req.body.description,
             completed: req.body.completed
@@ -36,7 +35,7 @@ todoRouter.post('/', (req, res) => {
             if(result === 'error') {
                 res.send('error writing file')
             } else {
-                res.send(todo);
+                res.json(todo);
             }
         })
         
@@ -104,5 +103,22 @@ todoRouter.put('/', (req, res) => {
         }
     });  
 })
+
+// generate a random id number so the id is not repeated, highest value is 1000 in this case.
+const generateRandomID = (idList) => {
+    while(true) {
+        var newId = getRandomIntInclusive(0, 1000)
+        console.log(newId);
+        if(idList.includes(newId)=== false) {
+            return newId;       
+        }
+    }
+}
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+}
 
 module.exports = todoRouter;
