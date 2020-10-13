@@ -11,7 +11,7 @@ class FileHandler  {
         })
     }
 
-    readFile = () => {
+    readFile() {
         return new Promise((resolve) => {
             fs.readFile('./models/todo.json', 'utf-8', (err, data) => {
                 if(err) {
